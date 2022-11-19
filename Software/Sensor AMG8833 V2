@@ -1,0 +1,100 @@
+//Código AMG8833 - grupo 15//
+#include <Wire.h>
+#include <Adafruit_AMG88xx.h>
+
+Adafruit_AMG88xx amg;
+
+float matriz1[AMG88xx_PIXEL_ARRAY_SIZE];
+float matriz2[AMG88xx_PIXEL_ARRAY_SIZE];
+float matriz3[AMG88xx_PIXEL_ARRAY_SIZE];
+
+float matrizTotal[192];
+
+char inChar = 0;
+void setup() {
+  Serial.begin(9600);
+  bool status;
+  // default settings
+  status = amg.begin();
+  if (!status) {
+    Serial.println("Could not find a valid AMG88xx sensor, check wiring!");
+    while (1)
+      ;
+  }
+}
+
+void loop() {
+  if (Serial.available() > 0) {
+    inChar = Serial.read();
+    switch (inChar) {
+
+      case '1':
+        Serial.println("Primera matriz de 8x8:");
+        amg.readPixels(matriz1);
+
+        Serial.print("[");
+        for (int i = 1; i <= AMG88xx_PIXEL_ARRAY_SIZE; i++) {
+          Serial.print(matriz1[i - 1]);
+          Serial.print(", ");
+          if (i % 8 == 0) Serial.println();
+        }
+
+        Serial.println("]");
+
+        break;
+
+      case '2':
+        Serial.println("Segunda matriz de 8x8");
+        amg.readPixels(matriz2);
+
+        Serial.print("[");
+        for (int i = 1; i <= AMG88xx_PIXEL_ARRAY_SIZE; i++) {
+          Serial.print(matriz2[i - 1]);
+          Serial.print(", ");
+          if (i % 8 == 0) Serial.println();
+        }
+
+        Serial.println("]");
+        break;
+
+      case '3':
+        Serial.println("Tercera matriz de 8x8");
+        amg.readPixels(matriz3);
+
+        Serial.print("[");
+        for (int i = 1; i <= AMG88xx_PIXEL_ARRAY_SIZE; i++) {
+          Serial.print(matriz3[i - 1]);
+          Serial.print(", ");
+          if (i % 8 == 0) Serial.println();
+        }
+
+        Serial.println("]");
+        break;
+
+      case '4':
+        Serial.println("Matriz total de 8x24");
+        Serial.print("[");
+        for (int i = 1; i <= AMG88xx_PIXEL_ARRAY_SIZE; i++) {
+          Serial.print(matriz1[i - 1]);
+          Serial.print(", ");
+          if (i % 8 == 0) Serial.println();
+        }
+        for (int i = 1; i <= AMG88xx_PIXEL_ARRAY_SIZE; i++) {
+          Serial.print(matriz2[i - 1]);
+          Serial.print(", ");
+          if (i % 8 == 0) Serial.println();
+        }
+        for (int i = 1; i <= AMG88xx_PIXEL_ARRAY_SIZE; i++) {
+          Serial.print(matriz3[i - 1]);
+          Serial.print(", ");
+          if (i % 8 == 0) Serial.println();
+        }
+
+        Serial.println("]");
+
+        break;
+      default:
+        break;
+    }
+  }
+}
