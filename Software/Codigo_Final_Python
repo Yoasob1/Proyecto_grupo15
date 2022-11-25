@@ -1,0 +1,24 @@
+lista=[1,10,10,10]
+import time,sys
+import numpy as np
+import matplotlib.pyplot as plt
+plt.rcParams.update({'font.size':16})
+fig_dims = (12,9) # figure size
+fig,ax = plt.subplots(figsize=fig_dims) # start figure
+pix_res = (24,8) # pixel resolution
+zz = np.zeros(pix_res) # set array with zeros first
+im1 = ax.imshow(zz,vmin=20,vmax=24) # plot image, with temperature bounds
+cbar = fig.colorbar(im1,fraction=0.0475,pad=0.03) # colorbar
+cbar.set_label('Temperature [C]',labelpad=10) # temp. label
+fig.canvas.draw() # draw figure
+ax_bgnd = fig.canvas.copy_from_bbox(ax.bbox) # background for speeding up runs
+fig.show() # show figure
+pixels=[22.00, 22.25, 22.25, 22.00, 21.75, 22.25, 22.00, 22.00, 21.75, 22.00, 21.75, 22.50, 22.50, 22.25, 22.50, 22.50, 21.75, 21.75, 21.75, 22.50, 22.00, 22.50, 22.50, 21.75, 22.50, 22.00, 22.25, 22.00, 22.00, 22.25, 22.00, 22.00, 22.25, 22.50, 22.25, 22.00, 22.25, 22.25, 22.00, 22.25, 21.25, 22.00, 22.25, 22.75, 22.25, 22.25, 21.50, 21.75, 21.25, 22.00, 22.00, 22.00, 22.00, 22.25, 21.75, 21.75, 21.00, 21.50, 21.75, 22.00, 21.50, 21.25, 22.00, 21.50, 23.00, 23.50, 22.75, 23.00, 23.25, 23.25, 23.00, 23.50, 23.25, 23.00, 23.00, 23.25, 23.50, 23.25, 23.25, 23.00, 23.00, 23.00, 23.00, 23.25, 23.50, 23.75, 23.25, 23.25, 23.50, 23.25, 23.25, 23.50, 23.00, 23.00, 23.00, 23.25, 23.25, 23.50, 23.50, 23.25, 23.50, 23.25, 23.50, 23.25, 22.75, 23.25, 23.25, 23.25, 24.00, 23.50, 23.00, 22.50, 23.00, 23.50, 23.75, 23.50, 23.25, 23.75, 24.00, 24.50, 22.50, 23.50, 24.25, 24.50, 24.00, 23.50, 23.75, 23.75, 23.50, 23.50, 23.50, 23.50, 23.25, 23.75, 23.50, 24.00, 23.00, 23.25, 23.50, 23.75, 24.25, 23.50, 24.00, 23.50, 23.25, 23.50, 23.50, 23.75, 23.75, 24.25, 23.75, 23.75, 23.50, 23.50, 24.00, 23.75, 23.75, 24.00, 23.75, 23.75, 23.75, 23.50, 23.25, 24.00, 24.25, 24.00, 24.25, 23.50, 23.25, 23.75, 23.50, 24.00, 24.25, 23.75, 23.75, 23.00, 23.25, 23.75, 23.50, 23.75, 23.50, 24.00, 23.50, 24.00, 23.50, 23.25, 23.75, 23.50, 23.50, 23.00, 23.25, 23.50]
+fig.canvas.restore_region(ax_bgnd) # restore background (speeds up run)
+im1.set_data(np.reshape(pixels,pix_res)) # update plot with new temps
+ax.draw_artist(im1) # draw image again
+fig.canvas.blit(ax.bbox) # blitting - for speeding up run
+fig.canvas.flush_events() # for real-time plot
+print(lista)
+
+
