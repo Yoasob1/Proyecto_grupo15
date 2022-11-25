@@ -1,0 +1,188 @@
+//Grupo 15
+//Curso : Fundamentos de Biodiseño
+//Libreria del movimiento del motor//
+#include <Stepper.h>
+#include <math.h>
+#include<EasyBuzzer.h>
+//Libreria de la camara//
+#include <Wire.h>
+#include <Adafruit_AMG88xx.h>
+//Grupo 15
+//Curso : Fundamentos de Biodiseño
+
+//Variables que utilizaremos para el movimiento del motor//
+int DIR=23;
+int STEP=27;
+int pinBuz=15;
+int LED_BLANCO=2;
+int LED_ROJO=14;
+int LED_VERDE=5;
+int a;
+//variables que utilizaremos para el funcionamiento de la cámara//
+Adafruit_AMG88xx amg;
+
+float matriz1[AMG88xx_PIXEL_ARRAY_SIZE];
+float matriz2[AMG88xx_PIXEL_ARRAY_SIZE];
+float matriz3[AMG88xx_PIXEL_ARRAY_SIZE];
+
+float matrizTotal[192];
+//Configuracion inicial de los pines, variables y funciones//
+void setup() {
+  //Acerca del motor //
+  Serial.begin(9600);
+  Serial.println("Comenzando escaneo");
+  pinMode(STEP, OUTPUT);
+  pinMode(DIR, OUTPUT);
+  pinMode(LED_BLANCO,OUTPUT);
+  pinMode(LED_ROJO, OUTPUT);
+  pinMode(LED_VERDE,OUTPUT);
+  EasyBuzzer.setPin(15);
+  //Acerca de la camara termografica//
+  bool status;
+  // default settings
+  status = amg.begin();
+  if (!status) {
+    Serial.println("Could not find a valid AMG88xx sensor, check wiring!");
+    while (1)
+      ;
+  }  
+  
+}
+void loop (){
+ 
+  digitalWrite(LED_VERDE,HIGH);
+  delay (4000);
+  //Imprimimos la primera matriz//
+        Serial.println("Primera matriz de 8x8:");
+        amg.readPixels(matriz1);
+
+        Serial.print("[");
+        for (int i = 1; i <= AMG88xx_PIXEL_ARRAY_SIZE; i++) {
+          Serial.print(matriz1[i - 1]);
+          Serial.print(", ");
+          if (i % 8 == 0) Serial.println();
+        }
+
+        Serial.println("]");
+  for(int p=0; p< 2000; p++){
+    
+    digitalWrite(DIR, LOW);
+    digitalWrite(STEP,HIGH);
+    delay (10);
+    digitalWrite(STEP,LOW);
+    if(p==2000){
+      //Segunda lectura//
+
+      break;
+    }
+  }
+  Serial.println("Realizando escaneo 1");
+  //Imprimimos la segunda matriz//
+        Serial.println("Segunda matriz de 8x8");
+        amg.readPixels(matriz2);
+
+        Serial.print("[");
+        for (int i = 1; i <= AMG88xx_PIXEL_ARRAY_SIZE; i++) {
+          Serial.print(matriz2[i - 1]);
+          Serial.print(", ");
+          if (i % 8 == 0) Serial.println();
+        }
+
+        Serial.println("]");
+  EasyBuzzer.singleBeep(200,5000);
+  digitalWrite(LED_BLANCO,HIGH);
+  delay(5000);
+  digitalWrite(LED_BLANCO,LOW);
+  EasyBuzzer.stopBeep();
+  for(int p=2000; p< 4000; p++){
+    digitalWrite(DIR, LOW);
+    digitalWrite(STEP,HIGH);
+    delay (10);
+    digitalWrite(STEP,LOW);
+    if(p==4000){
+      //Tercera lectura//
+ 
+      break;
+    }    
+  }
+  EasyBuzzer.singleBeep(200,5000);
+  //Imprimimos la tercera matriz//
+       Serial.println("Tercera matriz de 8x8");
+        amg.readPixels(matriz3);
+
+        Serial.print("[");
+        for (int i = 1; i <= AMG88xx_PIXEL_ARRAY_SIZE; i++) {
+          Serial.print(matriz3[i - 1]);
+          Serial.print(", ");
+          if (i % 8 == 0) Serial.println();
+        }
+
+        Serial.println("]");
+  digitalWrite(LED_BLANCO, HIGH);
+  delay(5000);
+  digitalWrite(LED_BLANCO,LOW);
+  EasyBuzzer.stopBeep();
+
+  for(int p=4000; p< 8000; p++){
+    digitalWrite(DIR, HIGH);
+    digitalWrite(STEP,HIGH);
+    delay (10);
+    digitalWrite(STEP,LOW);
+
+  }
+EasyBuzzer.singleBeep(100,500);
+ 
+ delay(500);
+ EasyBuzzer.stopBeep();
+ delay(500);
+EasyBuzzer.singleBeep(100,500);
+ 
+ delay(500);
+ EasyBuzzer.stopBeep();
+EasyBuzzer.singleBeep(100,500);
+ 
+ delay(500);
+ EasyBuzzer.stopBeep();
+ delay(500);
+EasyBuzzer.singleBeep(100,500);
+ 
+ delay(500);
+ EasyBuzzer.stopBeep();
+ delay(500);
+EasyBuzzer.singleBeep(100,500);
+ 
+ delay(500);
+ EasyBuzzer.stopBeep();
+ delay(500);
+ //Imprimimos la matriz completa//
+  Serial.println("Matriz total de 8x24");
+  Serial.print("[");
+        for (int i = 1; i <= AMG88xx_PIXEL_ARRAY_SIZE; i++) {
+          Serial.print(matriz1[i - 1]);
+          Serial.print(", ");
+          if (i % 8 == 0) Serial.println();
+        }
+        for (int i = 1; i <= AMG88xx_PIXEL_ARRAY_SIZE; i++) {
+          Serial.print(matriz2[i - 1]);
+          Serial.print(", ");
+          if (i % 8 == 0) Serial.println();
+        }
+        for (int i = 1; i <= AMG88xx_PIXEL_ARRAY_SIZE; i++) {
+          Serial.print(matriz3[i - 1]);
+          Serial.print(", ");
+          if (i % 8 == 0) Serial.println();
+        }
+
+        Serial.println("]");
+EasyBuzzer.singleBeep(250,5000);
+ 
+ delay(5000);
+ EasyBuzzer.stopBeep();
+
+
+  
+  
+  
+  
+}
+    
